@@ -9,10 +9,10 @@ module "vpc" {
   public_subnets  = ["10.0.2.0/24"]
 
   enable_nat_gateway = true
-  create_igw = true
+  create_igw         = true
 
   tags = {
-    Terraform = "true"
+    Terraform   = "true"
     Environment = "dev"
   }
 }
