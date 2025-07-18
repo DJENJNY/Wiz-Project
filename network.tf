@@ -86,16 +86,6 @@ resource "aws_iam_instance_profile" "mongo_ssm" {
   role = aws_iam_role.ec2_role.name
 }
 
-# Create Key Pair
-resource "aws_key_pair" "mongo_key" {
-  key_name   = "mongo-key"
-  public_key = file("~/.ssh/id_ed25519.pub") # path to your public key
-}
-
-output "ssh_key_name" {
-  value = aws_key_pair.mongo_key.key_name
-}
-
 # Create Mongo DB VM
 resource "aws_instance" "mongo" {
   ami                         = "ami-0150ccaf51ab55a51" # Ubuntu 20.04 (adjust for your region)
@@ -103,7 +93,7 @@ resource "aws_instance" "mongo" {
   subnet_id                   = module.vpc.private_subnets[0]
   vpc_security_group_ids      = [aws_security_group.mongo.id]
   iam_instance_profile        = aws_iam_instance_profile.mongo_ssm.name
-  key_name                    = aws_key_pair.mongo_key.key_name
+  
   associate_public_ip_address = false
 
   # Bash Script for Mongo DB Install
