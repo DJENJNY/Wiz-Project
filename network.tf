@@ -88,12 +88,12 @@ resource "aws_iam_instance_profile" "mongo_ssm" {
 
 # Create Mongo DB VM
 resource "aws_instance" "mongo" {
-  ami                         = "ami-0150ccaf51ab55a51" # Ubuntu 20.04 (adjust for your region)
-  instance_type               = "t2.micro"
-  subnet_id                   = module.vpc.private_subnets[0]
-  vpc_security_group_ids      = [aws_security_group.mongo.id]
-  iam_instance_profile        = aws_iam_instance_profile.mongo_ssm.name
-  
+  ami                    = "ami-0150ccaf51ab55a51" # Ubuntu 20.04 (adjust for your region)
+  instance_type          = "t2.micro"
+  subnet_id              = module.vpc.private_subnets[0]
+  vpc_security_group_ids = [aws_security_group.mongo.id]
+  iam_instance_profile   = aws_iam_instance_profile.mongo_ssm.name
+
   associate_public_ip_address = false
 
   # Bash Script for Mongo DB Install
