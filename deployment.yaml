@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasky-deployment
+  labels:
+    app: tasky
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tasky
+  template:
+    metadata:
+      labels:
+        app: tasky
+    spec:
+      containers:
+      - name: tasky
+        image: 712739085074.dkr.ecr.us-east-1.amazonaws.com/ej-registry@sha256:52e57bb9bd6405015f435782e26e8e590c9b347edf7ab5829d2ee84e9f9c42c9
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://10.10.1.48:27017"
+        - name: SECRET_KEY	
+          value: "secret123"

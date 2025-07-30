@@ -185,7 +185,7 @@ eks_managed_node_groups = {
 # ECR Repo
 resource "aws_ecr_repository" "registry" {
   name                 = "ej-registry"
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "MUTABLE" 
 
   image_scanning_configuration {
     scan_on_push = true
