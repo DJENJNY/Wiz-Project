@@ -98,6 +98,33 @@ resource "aws_iam_instance_profile" "mongo_ssm" {
   role = aws_iam_role.ec2_role.name
 }
 
+data "cloudinit_config" "foobar" {
+  gzip          = false
+  base64_encode = false
+
+  part {
+    filename     = "mongodb.sh"
+    content_type = "text/x-shellscript"
+
+    content = file("${path.module}/mongodb.sh")
+  }
+
+  part {
+    filename     = "cloud.conf"
+    content_type = "text/cloud-config"
+    content = yamlencode(
+      {
+        "write_files" : [
+          {
+            "path" : "/etc/mongod.conf",
+            "content" : file("${path.module}/mongod.conf"),
+          },
+        ],
+      }
+    )
+  }
+}
+
 # Create Mongo DB VM
 resource "aws_instance" "mongo" {
   ami                    = "ami-0150ccaf51ab55a51" # Ubuntu 20.04 (adjust for your region)
@@ -109,7 +136,7 @@ resource "aws_instance" "mongo" {
   associate_public_ip_address = false
 
   # Bash Script for Mongo DB Install
-  user_data = file("${path.module}/mongodb.sh")
+   user_data = data.cloudinit_config.foobar.rendered
 
   tags = {
     Name = "mongo_instance" # Optional: Add tags for easier identification

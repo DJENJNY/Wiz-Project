@@ -12,8 +12,13 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.99.0"
     }
+    cloudinit = {
+      source = "hashicorp/cloudinit"
+      version = "2.3.7"
+    }
+    }
   }
-}
+
 
 provider "aws" {
   region = "us-east-1"
