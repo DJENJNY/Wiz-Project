@@ -1,30 +1,30 @@
 variable "cidr_block" {
-type = string
-default = "10.10.0.0/16"
+  type    = string
+  default = "10.10.0.0/16"
 }
 
 variable "vpc_name" {
-type = string
-default = "my-vpc" 
+  type    = string
+  default = "my-vpc"
 }
 
 variable "tags" {
-type = map(string)
-default = {
+  type = map(string)
+  default = {
     terraform  = "true"
     kubernetes = "my-cluster"
-}
-description = "Tags to apply to all resources"
+  }
+  description = "Tags to apply to all resources"
 }
 
 variable "cluster_name" {
-    type = string
-    default = "my-cluster"
+  type    = string
+  default = "my-cluster"
 
 }
 
 variable "eks_version" {
-type = string
-default = "1.31"
-description = "EKS version"
+  type        = string
+  default     = "1.31"
+  description = "EKS version"
 }
