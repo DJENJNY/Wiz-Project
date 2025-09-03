@@ -88,23 +88,3 @@ kubectl apply -f ./k8s/ingress.yaml
 ```
 kubectl apply -f ./k8s
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

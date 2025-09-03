@@ -1,6 +1,6 @@
 terraform {
   required_version = ">= 1.3.2"
-
+  
   backend "s3" {
     bucket = "wiz-project"
     key    = "terraform"
@@ -13,14 +13,15 @@ terraform {
       version = "~> 5.99.0"
     }
     cloudinit = {
-      source  = "hashicorp/cloudinit"
+      source = "hashicorp/cloudinit"
       version = "2.3.7"
     }
+    }
   }
-}
 
 
 provider "aws" {
   region = "us-east-1"
 }
+
 
