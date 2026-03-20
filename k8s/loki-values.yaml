@@ -1,0 +1,79 @@
+deploymentMode: SingleBinary
+
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  
+  schemaConfig:
+    configs:
+      - from: "2024-01-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
+
+  storage:
+    type: 'filesystem'
+
+singleBinary:
+  replicas: 1
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: "gp2"
+
+# Turning off scalable replicas to satisfy the chart validator
+read:
+  replicas: 0
+write:
+  replicas: 0
+backend:
+  replicas: 0
+
+# Optional: Disable extra caching pods to save on AWS costs/resources
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false
+
+# promtail:
+#   enabled: true
+#   config:
+#     clients:
+#       - url: http://{{ .Release.Name }}-gateway.{{ .Release.Namespace }}.svc.cluster.local/loki/api/v1/push
+
+promtail:
+  enabled: true
+  config:
+    # This snippet contains the 'magic' that maps K8s labels to Loki labels
+    snippets:
+      common:
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_pod_node_name
+          target_label: node_name
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_namespace
+          target_label: namespace
+        - action: replace
+          replacement: $1
+          separator: /
+          source_labels:
+            - __meta_kubernetes_namespace
+            - __meta_kubernetes_pod_name
+          target_label: job
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_pod_name
+          target_label: pod
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_pod_container_name
+          target_label: container
+        # This part specifically grabs YOUR custom labels (like app=tasky)
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
